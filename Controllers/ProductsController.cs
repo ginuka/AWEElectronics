@@ -133,14 +133,12 @@ namespace AWEElectronics.Controllers
 
                 _context.Add(product);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
 
             return View(model);
         }
-
-
-
 
 
         // GET: Products/Edit/5
@@ -180,8 +178,6 @@ namespace AWEElectronics.Controllers
 
             return View(productViewModel);
         }
-
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -239,44 +235,6 @@ namespace AWEElectronics.Controllers
         }
 
 
-
-
-
-        // POST: Products/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,ImageBytes,Availability")] Product product)
-        //{
-        //    if (id != product.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(product);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!ProductExists(product.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(product);
-        //}
-
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -292,7 +250,27 @@ namespace AWEElectronics.Controllers
                 return NotFound();
             }
 
-            return View(product);
+            var addproduct = await _context.ProductGroups.FindAsync(product.ProductGroupId);
+
+            var productGroups = _context.ProductGroups
+                .Select(pg => new SelectListItem
+                {
+                    Value = pg.Id.ToString(),
+                    Text = pg.Name
+                }).ToList();
+
+            var productViewModel = new ProductViewModel();
+            productViewModel.Id = product.Id;
+            productViewModel.Name = product.Name;
+            productViewModel.Price = product.Price;
+            productViewModel.Availability = product.Availability;
+            productViewModel.ImageBytes = product.Image;
+
+            productViewModel.ProductGroupId = addproduct == null ? 0 : addproduct.Id;
+            productViewModel.ProductGroups = productGroups;
+            productViewModel.ProductGroupName = addproduct?.Name;
+
+            return View(productViewModel);
         }
 
         // POST: Products/Delete/5

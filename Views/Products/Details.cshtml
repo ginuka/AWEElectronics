@@ -10,22 +10,22 @@
     <!-- Left: Product Details -->
     <div class="col-md-4">
         <dl class="row">
-            <dt class="col-sm-4">Product Name</dt>
-            <dd class="col-sm-8">@Model.Name</dd>
+            <dt class="col-sm-2">Product Name</dt>
+            <dd class="col-sm-10">@Model.Name</dd>
 
-            <dt class="col-sm-4">Product Group</dt>
-            <dd class="col-sm-8">@Model.ProductGroupName</dd>
+            <dt class="col-sm-2">Product Group</dt>
+            <dd class="col-sm-10">@Model.ProductGroupName</dd>
 
-            <dt class="col-sm-4">Price</dt>
-            <dd class="col-sm-8">$@Model.Price.ToString("F2")</dd>
+            <dt class="col-sm-2">Price</dt>
+            <dd class="col-sm-10">$@Model.Price.ToString("F2")</dd>
 
-            <dt class="col-sm-4">Availability</dt>
-            <dd class="col-sm-8">@Model.Availability</dd>
+            <dt class="col-sm-2">Availability</dt>
+            <dd class="col-sm-10">@Model.Availability</dd>
         </dl>
 
         <form method="post" asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@Model.Id">
             <button type="submit" class="btn btn-success">Add to Cart</button>
-            <a asp-action="~/" class="btn btn-secondary ml-2">Back to List</a>
+            <a href="~/" class="btn btn-secondary ml-2">Back to List</a>
         </form>
     </div>
 
