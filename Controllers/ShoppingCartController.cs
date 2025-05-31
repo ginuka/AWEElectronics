@@ -25,20 +25,20 @@ namespace AWEElectronics.Controllers
         // GET: /ShoppingCart
         public async Task<IActionResult> Index()
         {
-            var userId = GetCurrentUserId();
+            var customer = await GetCurrentCustomerAsync();
 
             // Load shopping cart with items and product info
             var cart = await _context.ShoppingCarts
                 .Include(c => c.Items)
                     .ThenInclude(i => i.Product)
-                .FirstOrDefaultAsync(c => c.CustomerId == userId);
+                .FirstOrDefaultAsync(c => c.CustomerId == customer.Id);
 
             if (cart == null)
             {
                 // Create a new cart for the user if not exists
                 cart = new ShoppingCart
                 {
-                    CustomerId = userId
+                    CustomerId = customer.Id
                 };
                 _context.ShoppingCarts.Add(cart);
                 await _context.SaveChangesAsync();
@@ -112,11 +112,11 @@ namespace AWEElectronics.Controllers
         [HttpPost]
         public async Task<IActionResult> Clear()
         {
-            var userId = GetCurrentUserId();
+            var userId = await GetCurrentCustomerAsync();
 
             var cart = await _context.ShoppingCarts
                 .Include(c => c.Items)
-                .FirstOrDefaultAsync(c => c.CustomerId == userId);
+                .FirstOrDefaultAsync(c => c.CustomerId == userId.Id);
 
             if (cart != null)
             {
