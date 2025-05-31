@@ -22,20 +22,20 @@
 <table class="table table-bordered">
     <thead class="table-light">
         <tr>
-            <th>@Html.DisplayNameFor(model => model.First().Name)</th>
-            <th>@Html.DisplayNameFor(model => model.First().Price)</th>
-            <th>@Html.DisplayNameFor(model => model.First().ImageFile)</th>
-            <th>@Html.DisplayNameFor(model => model.First().Availability)</th>
-            <th>Actions</th>
+            <th style="width: 30%;">@Html.DisplayNameFor(model => model.First().Name)</th>
+            <th style="width: 20%;">@Html.DisplayNameFor(model => model.First().Price)</th>
+            <th style="width: 20%;text-align: center;">@Html.DisplayNameFor(model => model.First().Image)</th>
+            <th style="width: 10%;">@Html.DisplayNameFor(model => model.First().Availability)</th>
+            <th style="width: 20%; text-align: center;">Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.Name</td>
-                <td>@item.Price</td>
-                <td>
+                <td style="width: 30%;">@item.Name</td>
+                <td style="width: 20%;text-align:right">@item.Price</td>
+                <td style="width: 20%;text-align:center">
                     @if (item.ImageBytes != null)
                     {
                         <img src="data:image/png;base64,@Convert.ToBase64String(item.ImageBytes)" width="100" />
@@ -45,23 +45,19 @@
                         <span>No image</span>
                     }
                 </td>
-                <td>@item.Availability</td>
-                <td>
-                    @* <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info mb-3">Edit</a> 
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info mb-3">Details</a> 
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger mb-3">Delete</a> *@
-
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm me-1" title="Edit">
-                        <i class="bi bi-pencil-square"></i>
-                    </a>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary btn-sm me-1" title="Details">
-                        <i class="bi bi-eye"></i>
-                    </a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm" title="Delete">
-                        <i class="bi bi-trash"></i>
-                    </a>
-
-
+                <td style="width: 10%;text-align:right">@item.Availability</td>
+                <td style="width: 20%;">
+                    <div style="display: flex; justify-content: center; gap: 5px;">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm" title="Edit">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary btn-sm" title="Details">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm" title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </div>
                 </td>
             </tr>
         }
