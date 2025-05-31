@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using AWEElectronics.Data;
 using AWEElectronics.Models;
 using AWEElectronics.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AWEElectronics.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProductGroupsController : Controller
     {
         private readonly ApplicationDbContext _context;

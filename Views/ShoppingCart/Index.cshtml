@@ -1,0 +1,50 @@
+﻿@model AWEElectronics.Models.ShoppingCart
+@{
+    ViewData["Title"] = "My Cart";
+}
+
+
+
+@if (Model.Items == null || !Model.Items.Any())
+{
+    <p>Your shopping cart is empty.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Unit Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.Product.Name</td>
+                    <td>@item.UnitPrice.ToString("C")</td>
+                    <td>@item.Quantity</td>
+                    <td>@(item.Quantity * item.UnitPrice).ToString("C")</td>
+                    <td>
+                        <form asp-action="Remove" method="post" asp-route-id="@item.Id" onsubmit="return confirm('Remove this item?');">
+                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="3" class="text-right"><strong>Total:</strong></td>
+                <td colspan="2"><strong>@Model.TotalAmount.ToString("C")</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <form asp-action="Clear" method="post" onsubmit="return confirm('Clear your entire shopping cart?');">
+        <button type="submit" class="btn btn-warning">Clear Cart</button>
+    </form>
+}
+

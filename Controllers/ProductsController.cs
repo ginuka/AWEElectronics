@@ -311,66 +311,10 @@ namespace AWEElectronics.Controllers
             return _context.Products.Any(e => e.Id == id);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddToCart(int id)
-        {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return Redirect("/Identity/Account/Login");
-            }
-
-            var customer = await GetCurrentCustomerAsync();
-
-            var cart = await _context.ShoppingCarts
-                .Include(c => c.Items)
-                .FirstOrDefaultAsync(c => c.CustomerId == customer.Id);
-
-            if (cart == null)
-            {
-                cart = new ShoppingCart { CustomerId = customer.Id };
-                _context.ShoppingCarts.Add(cart);
-                await _context.SaveChangesAsync();
-            }
-
-            var existingItem = cart.Items.FirstOrDefault(i => i.ProductId == id);
-
-            if (existingItem != null)
-            {
-                existingItem.Quantity += 1;
-            }
-            else
-            {
-                var product = await _context.Products.FindAsync(id);
-                if (product == null) return NotFound();
-
-                var item = new ShoppingCartItem
-                {
-                    ProductId = id,
-                    Quantity = 1,
-                    UnitPrice = product.Price,
-                    ShoppingCartId = cart.Id
-                };
-                _context.ShoppingCartItems.Add(item);
-            }
-
-            await _context.SaveChangesAsync();
-            TempData["Message"] = "Product added to cart!";
-            return RedirectToAction("Details", "Product", new { id });
-        }
+        
 
 
-        private async Task<Customer> GetCurrentCustomerAsync()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null) throw new Exception("User not logged in.");
-
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(c => c.IdentityUserId == user.Id);
-
-            if (customer == null) throw new Exception("No customer profile found for this user.");
-
-            return customer;
-        }
+        
     }
 
 

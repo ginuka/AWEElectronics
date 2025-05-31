@@ -23,7 +23,7 @@
             <dd class="col-sm-8">@Model.Availability</dd>
         </dl>
 
-        <form method="post" asp-action="AddToCart" asp-route-id="@Model.Id">
+        <form method="post" asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@Model.Id">
             <button type="submit" class="btn btn-success">Add to Cart</button>
             <a asp-action="~/" class="btn btn-secondary ml-2">Back to List</a>
         </form>

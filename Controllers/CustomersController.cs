@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AWEElectronics.Data;
 using AWEElectronics.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AWEElectronics.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CustomersController : Controller
     {
         private readonly ApplicationDbContext _context;
