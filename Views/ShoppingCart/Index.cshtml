@@ -3,7 +3,7 @@
     ViewData["Title"] = "My Cart";
 }
 
-
+<h2>@ViewData["Title"]</h2>
 
 @if (Model.Items == null || !Model.Items.Any())
 {
@@ -43,8 +43,13 @@ else
         </tbody>
     </table>
 
-    <form asp-action="Clear" method="post" onsubmit="return confirm('Clear your entire shopping cart?');">
-        <button type="submit" class="btn btn-warning">Clear Cart</button>
-    </form>
-}
+    <div class="d-flex gap-2">
+        <form asp-action="Clear" method="post" onsubmit="return confirm('Clear your entire shopping cart?');">
+            <button type="submit" class="btn btn-warning">Clear Cart</button>
+        </form>
 
+        <form asp-controller="Orders" asp-action="Checkout" method="post" onsubmit="return confirm('Proceed to checkout?');">
+            <button type="submit" class="btn btn-success">Checkout</button>
+        </form>
+    </div>
+}

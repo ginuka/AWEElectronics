@@ -1,0 +1,61 @@
+﻿@model AWEElectronics.ViewModel.OrderReportViewModel
+
+@{
+    ViewData["Title"] = "Order Report";
+}
+
+<h2>Order Report</h2>
+
+<form method="post" asp-action="Order">
+    <div class="mb-4">
+    <label for="period" class="form-label fw-bold">Select Period</label>
+    <div class="input-group">
+        <span class="input-group-text">
+            <i class="bi bi-calendar-event"></i> <!-- Bootstrap icon -->
+        </span>
+        <select class="form-select" id="period" name="Period" required>
+            <option value="">-- Select Period --</option>
+            <option value="daily">Daily</option>
+            <option value="monthly">Monthly</option>
+            <option value="yearly">Yearly</option>
+        </select>
+    </div>
+</div>
+
+    <button type="submit" class="btn btn-primary">Generate Report</button>
+</form>
+
+@if (Model.Orders != null && Model.Orders.Any())
+{
+    <h4 class="mt-4">Orders from @Model.FromDate?.ToString("yyyy-MM-dd") to @Model.ToDate?.ToString("yyyy-MM-dd")</h4>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Items Count</th>
+                <th>Total Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.Orders)
+            {
+                var total = order.Items.Sum(i => i.Quantity * i.UnitPrice);
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.Customer?.Name</td>
+                    <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
+                    <td>@order.Status</td>
+                    <td>@order.Items.Count()</td>
+                    <td>@total.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No orders found for the selected period.</p>
+}

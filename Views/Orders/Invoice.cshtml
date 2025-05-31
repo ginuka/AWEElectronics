@@ -1,0 +1,38 @@
+﻿@model OrderInvoiceViewModel
+
+<h2>Invoice #@Model.OrderId</h2>
+<p><strong>Date:</strong> @Model.OrderDate.ToString("dd MMM yyyy")</p>
+
+<h4>Customer</h4>
+<p>
+    @Model.CustomerName <br />
+    @Model.CustomerEmail
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.ProductName</td>
+                <td>@item.Quantity</td>
+                <td>@item.UnitPrice.ToString("C")</td>
+                <td>@item.SubTotal.ToString("C")</td>
+            </tr>
+        }
+        <tr>
+            <td colspan="3" class="text-end"><strong>Total:</strong></td>
+            <td><strong>@Model.TotalAmount.ToString("C")</strong></td>
+        </tr>
+    </tbody>
+</table>
+
+<button class="btn btn-primary" onclick="window.print()">Print Invoice</button>

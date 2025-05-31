@@ -1,0 +1,36 @@
+﻿@model AWEElectronics.Models.Order
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Order #@Model.Id</h2>
+
+<p><strong>Date:</strong> @Model.OrderDate.ToString("yyyy-MM-dd")</p>
+<p><strong>Status:</strong> @Model.Status</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Unit Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.Product?.Name</td>
+                <td>@item.UnitPrice.ToString("C")</td>
+                <td>@item.Quantity</td>
+                <td>@(item.UnitPrice * item.Quantity)</td>
+            </tr>
+        }
+        <tr>
+            <td colspan="3" class="text-end"><strong>Total:</strong></td>
+            <td><strong>@Model.TotalAmount.ToString("C")</strong></td>
+        </tr>
+    </tbody>
+</table>

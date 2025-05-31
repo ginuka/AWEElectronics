@@ -1,0 +1,43 @@
+﻿@model IEnumerable<AWEElectronics.Models.Order>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>My Orders</h2>
+
+@if (!Model.Any())
+{
+    <p>You have no orders.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
+                    <td>@order.Status</td>
+                    <td>@order.TotalAmount.ToString("C")</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-primary">View</a>
+
+                        <a style="margin-left:10px" asp-controller="Orders" asp-action="Invoice" asp-route-id="@order.Id" class="btn btn-success">View Invoice</a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
