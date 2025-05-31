@@ -13,6 +13,7 @@ namespace AWEElectronics.ViewModel
         public string Name { get; set; }
         public decimal Price { get; set; }
         public IFormFile ImageFile { get; set; }
+        public IFormFile Image { get; set; }
         public byte[] ImageBytes { get; set; }
         public int Availability { get; set; }
         public int ProductGroupId { get; set; }
