@@ -1,0 +1,69 @@
+﻿@model AWEElectronics.Models.Admin
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Admin</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Phone)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+        @* <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Password)
+        </dd> *@
+        <dd class="col-sm-4">
+            <div class="input-group">
+                <input type="password" id="passwordField" class="form-control" value="@Model.Password" readonly />
+                <span class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
+                    <i id="eyeIcon" class="fa fa-eye"></i>
+                </span>
+            </div>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script>
+        function togglePassword() {
+            const passwordField = document.getElementById("passwordField");
+            const eyeIcon = document.getElementById("eyeIcon");
+
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                eyeIcon.classList.remove("fa-eye");
+                eyeIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordField.type = "password";
+                eyeIcon.classList.remove("fa-eye-slash");
+                eyeIcon.classList.add("fa-eye");
+            }
+        }
+    </script>
+}

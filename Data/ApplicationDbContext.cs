@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using AWEElectronics.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,5 +13,9 @@ namespace AWEElectronics.Data
             : base(options)
         {
         }
+
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Admin> Admins { get; set; }
+        public DbSet<Customer> Customers { get; set; }
     }
 }

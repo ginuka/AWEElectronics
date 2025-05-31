@@ -1,0 +1,126 @@
+﻿@model IEnumerable<AWEElectronics.ViewModel.ProductViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Product List</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success mb-3">Create New</a>
+</p>
+
+<!-- Search Form -->
+<form id="searchForm" class="mb-3">
+    <div class="d-flex">
+        <input type="text" id="searchInput" class="form-control me-2" placeholder="Search by name..." style="margin-right: 2px"/>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
+
+<!-- Product Table -->
+<table class="table table-bordered">
+    <thead class="table-light">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.First().Name)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Price)</th>
+            <th>@Html.DisplayNameFor(model => model.First().ImageFile)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Availability)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Price</td>
+                <td>
+                    @if (item.ImageBytes != null)
+                    {
+                        <img src="data:image/png;base64,@Convert.ToBase64String(item.ImageBytes)" width="100" />
+                    }
+                    else
+                    {
+                        <span>No image</span>
+                    }
+                </td>
+                <td>@item.Availability</td>
+                <td>
+                    @* <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info mb-3">Edit</a> 
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info mb-3">Details</a> 
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger mb-3">Delete</a> *@
+
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm me-1" title="Edit">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary btn-sm me-1" title="Details">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm" title="Delete">
+                        <i class="bi bi-trash"></i>
+                    </a>
+
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        document.getElementById("searchForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            
+            const searchTerm = document.getElementById("searchInput").value;
+
+            try {
+                const response = await fetch(`/Products/Search?term=${encodeURIComponent(searchTerm)}`);
+
+                if (!response.ok) {
+                    throw new Error("Search request failed.");
+                }
+
+                const data = await response.json();
+                const tbody = document.querySelector("table tbody");
+                tbody.innerHTML = ""; // Clear existing rows
+
+                if (data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="text-center">No products found.</td></tr>`;
+                    return;
+                }
+
+                data.forEach(item => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                                <td>${item.name}</td>
+                                <td>${item.price}</td>
+                                <td>
+                                    ${item.imageBytes
+                            ? `<img src="data:image/png;base64,${item.imageBytes}" width="100" />`
+                            : `<span>No image</span>`}
+                                </td>
+                                <td>${item.availability}</td>
+
+                              <td>
+                                <a href="/Products/Edit/${item.id}" class="btn btn-info btn-sm me-1" title="Edit">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="/Products/Details/${item.id}" class="btn btn-secondary btn-sm me-1" title="Details">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="/Products/Delete/${item.id}" class="btn btn-danger btn-sm" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                            `;
+                    tbody.appendChild(row);
+                });
+            } catch (err) {
+                alert("Error: " + err.message);
+            }
+        });
+    </script>
+}
