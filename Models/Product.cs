@@ -10,7 +10,7 @@ namespace AWEElectronics.Models
         public int Id { get; set; }
 
         public int ProductGroupId { get; set; }
-        //public ProductGroup ProductGroup { get; set; }
+        public ProductGroup ProductGroup { get; set; }
 
         public string Name { get; set; }
         public decimal Price { get; set; }

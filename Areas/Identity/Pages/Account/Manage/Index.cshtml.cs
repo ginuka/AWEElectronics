@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using AWEElectronics.Data;
+using AWEElectronics.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace AWEElectronics.Areas.Identity.Pages.Account.Manage
 {
@@ -13,13 +16,15 @@ namespace AWEElectronics.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
-
+        private readonly ApplicationDbContext _context;
         public IndexModel(
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
         public string Username { get; set; }
@@ -35,6 +40,13 @@ namespace AWEElectronics.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "Full Name")]
+            public string Name { get; set; }
+            public string Address { get; set; }
+            public string City { get; set; }
+            public string State { get; set; }
+            public string ZipCode { get; set; }
         }
 
         private async Task LoadAsync(IdentityUser user)
@@ -44,9 +56,17 @@ namespace AWEElectronics.Areas.Identity.Pages.Account.Manage
 
             Username = userName;
 
+            var customer = await _context.Customers
+        .FirstOrDefaultAsync(c => c.IdentityUserId == user.Id);
+
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                Name = customer?.Name,
+                Address = customer?.Address,
+                City = customer?.City,
+                State = customer?.State,
+                ZipCode = customer?.ZipCode
             };
         }
 
@@ -86,6 +106,39 @@ namespace AWEElectronics.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+
+            // 🔽 Insert or Update Customer info
+            var customer = await _context.Customers
+                .FirstOrDefaultAsync(c => c.IdentityUserId == user.Id);
+
+            if (customer == null)
+            {
+                customer = new Customer
+                {
+                    IdentityUserId = user.Id,
+                    Phone = Input.PhoneNumber,
+                    Email = user.Email,
+                    Name = user.UserName,
+                    Address = Input.Address,
+                    City = Input.City,
+                    State = Input.State,
+                    ZipCode = Input.ZipCode
+                };
+                _context.Customers.Add(customer);
+            }
+            else
+            {
+                customer.Phone = Input.PhoneNumber;
+                customer.Email = user.Email;
+                customer.Name = user.UserName;
+                customer.Address = Input.Address;
+                customer.City = Input.City;
+                customer.State = Input.State;
+                customer.ZipCode = Input.ZipCode;
+                _context.Customers.Update(customer);
+            }
+
+            await _context.SaveChangesAsync();
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

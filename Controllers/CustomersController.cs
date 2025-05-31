@@ -54,7 +54,7 @@ namespace AWEElectronics.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Phone,Email,Address,City,State,ZipCode,Password")] Customer customer)
+        public async Task<IActionResult> Create([Bind("Id,Name,Phone,Email,Address,City,State,ZipCode")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace AWEElectronics.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Phone,Email,Address,City,State,ZipCode,Password")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Phone,Email,Address,City,State,ZipCode")] Customer customer)
         {
             if (id != customer.Id)
             {
