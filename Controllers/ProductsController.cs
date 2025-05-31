@@ -57,6 +57,15 @@ namespace AWEElectronics.Controllers
                 return NotFound();
             }
 
+            var addproduct = await _context.ProductGroups.FindAsync(product.ProductGroupId);
+
+            var productGroups = _context.ProductGroups
+                .Select(pg => new SelectListItem
+                {
+                    Value = pg.Id.ToString(),
+                    Text = pg.Name
+                }).ToList();
+
             var productViewModel = new ProductViewModel();
             productViewModel.Id = product.Id;
             productViewModel.Name = product.Name;
@@ -64,14 +73,32 @@ namespace AWEElectronics.Controllers
             productViewModel.Availability = product.Availability;
             productViewModel.ImageBytes = product.Image;
 
+            productViewModel.ProductGroupId = addproduct == null ? 0 : addproduct.Id;
+            productViewModel.ProductGroups = productGroups;
+            productViewModel.ProductGroupName = addproduct?.Name;
+
             return View(productViewModel);
         }
 
         // GET: Products/Create
         public IActionResult Create()
         {
-            return View();
+            var groups = _context.ProductGroups
+                .Select(pg => new SelectListItem
+                {
+                    Value = pg.Id.ToString(),
+                    Text = pg.Name
+                })
+                .ToList();
+
+            var viewModel = new ProductViewModel
+            {
+                ProductGroups = groups
+            };
+
+            return View(viewModel);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -95,7 +122,8 @@ namespace AWEElectronics.Controllers
                     Name = model.Name,
                     Price = model.Price,
                     Availability = model.Availability,
-                    Image = imageData
+                    Image = imageData,
+                    ProductGroupId = model.ProductGroupId
                 };
 
                 _context.Add(product);
@@ -124,12 +152,26 @@ namespace AWEElectronics.Controllers
                 return NotFound();
             }
 
+            var addproduct = await _context.ProductGroups.FindAsync(product.ProductGroupId);
+            //if (addproduct == null) return NotFound();
+
+            var productGroups = _context.ProductGroups
+                .Select(pg => new SelectListItem
+                {
+                    Value = pg.Id.ToString(),
+                    Text = pg.Name
+                }).ToList();
+
             var productViewModel = new ProductViewModel();
             productViewModel.Id = product.Id;
             productViewModel.Name = product.Name;
             productViewModel.Price = product.Price;
             productViewModel.Availability = product.Availability;
             productViewModel.ImageBytes = product.Image;
+
+            productViewModel.ProductGroupId = addproduct == null ? 0: addproduct.Id;
+            productViewModel.ProductGroups = productGroups;
+            productViewModel.ProductGroupName = addproduct?.Name;
 
             return View(productViewModel);
         }
@@ -150,6 +192,7 @@ namespace AWEElectronics.Controllers
                 product.Name = model.Name;
                 product.Price = model.Price;
                 product.Availability = model.Availability;
+                product.ProductGroupId = model.ProductGroupId;
 
 
                 // If new image uploaded, replace it

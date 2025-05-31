@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,12 @@ namespace AWEElectronics.ViewModel
         public IFormFile ImageFile { get; set; }
         public byte[] ImageBytes { get; set; }
         public int Availability { get; set; }
+        public int ProductGroupId { get; set; }
+        public string ProductGroupName { get; set; }
+        public string Group { get; set; }
+
+        public List<SelectListItem> ProductGroups { get; set; }
+
+        //public List<SelectListItem> ProductGroupList { get; set; } = new List<SelectListItem>();
     }
 }

@@ -6,24 +6,48 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AWEElectronics.Models;
+using AWEElectronics.ViewModel;
+using Microsoft.EntityFrameworkCore;
+using AWEElectronics.Data;
 
 namespace AWEElectronics.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
             _logger = logger;
+            _context = context;
 
-            //aaa
         }
+
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
+
 
         public IActionResult Index()
         {
-            return View();
+            var products = _context.Products
+                .Select(p => new ProductViewModel
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Price = p.Price,
+                    Availability = p.Availability,
+                    ImageBytes = p.Image
+                }).ToList();
+
+            return View(products);
         }
+
+
+
+
 
         public IActionResult Privacy()
         {
