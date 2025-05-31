@@ -22,18 +22,18 @@ namespace AWEElectronics.Areas.Identity.Pages.Account
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
-            _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         [BindProperty]
@@ -79,6 +79,15 @@ namespace AWEElectronics.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    // 🔐 Ensure "Customer" role exists
+                    if (!await _roleManager.RoleExistsAsync("Customer"))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole("Customer"));
+                    }
+
+                    // ✅ Assign "Customer" role to user
+                    await _userManager.AddToRoleAsync(user, "Customer");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);

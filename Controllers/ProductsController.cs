@@ -9,16 +9,20 @@ using AWEElectronics.Data;
 using AWEElectronics.Models;
 using AWEElectronics.ViewModel;
 using System.IO;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AWEElectronics.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public ProductsController(ApplicationDbContext context)
+        private readonly UserManager<IdentityUser> _userManager;
+        public ProductsController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Products
@@ -43,6 +47,7 @@ namespace AWEElectronics.Controllers
         }
 
         // GET: Products/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -305,5 +310,12 @@ namespace AWEElectronics.Controllers
         {
             return _context.Products.Any(e => e.Id == id);
         }
+
+        
+
+
+        
     }
+
+
 }

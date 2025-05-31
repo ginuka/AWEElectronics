@@ -19,7 +19,13 @@ namespace AWEElectronics.Data
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Customer> Customers { get; set; }
 
+        public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+        public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
 
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+
+        public DbSet<Invoice> Invoices { get; set; }
 
     }
 }

@@ -30,8 +30,15 @@ namespace AWEElectronics
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Identity/Account/Login";      // Redirect here if unauthorized
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied"; // Optional: Access denied page
+            });
+
             services.AddControllersWithViews();
            services.AddRazorPages();
         }

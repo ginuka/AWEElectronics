@@ -1,4 +1,6 @@
-﻿namespace AWEElectronics.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace AWEElectronics.Models
 {
     public class Customer
     {
@@ -10,6 +12,7 @@
         public string City { get; set; }
         public string State { get; set; }
         public string ZipCode { get; set; }
-        public string Password { get; set; }
+        public string IdentityUserId { get; set; } // Foreign key
+        public IdentityUser IdentityUser { get; set; } // Navigation property
     }
 }
