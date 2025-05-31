@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Order>
+
+<h2>All Orders</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            var total = order.Items.Sum(i => i.Quantity * i.UnitPrice);
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.Customer?.Name</td>
+                <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
+                <td>@order.Status</td>
+                <td>@total.ToString("C")</td>
+                <td>
+                    <a asp-action="EditStatus" asp-route-id="@order.Id" class="btn btn-sm btn-outline-primary">Update Status</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
