@@ -16,6 +16,8 @@ namespace AWEElectronics.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+
+            //aaa
         }
 
         public IActionResult Index()
