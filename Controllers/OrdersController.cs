@@ -22,6 +22,18 @@ namespace AWEElectronics.Controllers
         public async Task<IActionResult> Index()
         {
             var customer = await GetCurrentCustomerAsync();
+
+            // Check if shipping/customer details are complete
+            if (string.IsNullOrWhiteSpace(customer.Name) ||
+                string.IsNullOrWhiteSpace(customer.Address) ||
+                string.IsNullOrWhiteSpace(customer.City) ||
+                string.IsNullOrWhiteSpace(customer.State) ||
+                string.IsNullOrWhiteSpace(customer.ZipCode))
+            {
+                TempData["Error"] = "Please complete your shipping details before proceeding to checkout.";
+                return LocalRedirect("/Identity/Account/Manage");
+            }
+
             var orders = await _context.Orders
                 .Include(o => o.Items)
                 .ThenInclude(i => i.Product)

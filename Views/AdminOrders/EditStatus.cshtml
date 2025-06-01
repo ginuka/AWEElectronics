@@ -5,17 +5,19 @@
 <form asp-action="EditStatus" method="post">
     <input type="hidden" name="id" value="@Model.Id" />
 
-    <div class="mb-3">
-        <label class="form-label">Order Status</label>
-        <select class="form-select" name="status" required>
-            <option value="Pending" selected="@("Pending" == Model.Status)">Pending</option>
-            <option value="Processing" selected="@("Processing" == Model.Status)">Processing</option>
-            <option value="Shipped" selected="@("Shipped" == Model.Status)">Shipped</option>
-            <option value="Completed" selected="@("Completed" == Model.Status)">Completed</option>
-            <option value="Cancelled" selected="@("Cancelled" == Model.Status)">Cancelled</option>
+    <div class="form-group">
+        <label for="statusSelect">Order Status</label>
+        <select id="statusSelect" class="form-control" name="status" required>
+            <option value="Pending" selected="@(Model.Status == "Pending")">Pending</option>
+            <option value="Processing" selected="@(Model.Status == "Processing")">Processing</option>
+            <option value="Shipped" selected="@(Model.Status == "Shipped")">Shipped</option>
+            <option value="Completed" selected="@(Model.Status == "Completed")">Completed</option>
+            <option value="Cancelled" selected="@(Model.Status == "Cancelled")">Cancelled</option>
         </select>
     </div>
 
-    <button type="submit" class="btn btn-success">Save</button>
-    <a asp-action="Index" class="btn btn-secondary">Back</a>
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-success">Save</button>
+        <a asp-action="Index" class="btn btn-secondary">Back</a>
+    </div>
 </form>
