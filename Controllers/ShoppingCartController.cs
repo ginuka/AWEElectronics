@@ -25,7 +25,16 @@ namespace AWEElectronics.Controllers
         // GET: /ShoppingCart
         public async Task<IActionResult> Index()
         {
-            var customer = await GetCurrentCustomerAsync();
+            var customer = new Customer();
+            try
+            {
+                customer = await GetCurrentCustomerAsync();
+            }
+            catch
+            {
+                TempData["Error"] = "Please complete your shipping details.";
+                return LocalRedirect("/Identity/Account/Manage");
+            }
 
             // Check if shipping/customer details are complete
             if (string.IsNullOrWhiteSpace(customer.Name) ||
@@ -66,7 +75,16 @@ namespace AWEElectronics.Controllers
                 return Redirect("/Identity/Account/Login");
             }
 
-            var customer = await GetCurrentCustomerAsync();
+            var customer = new Customer();
+            try
+            {
+                customer = await GetCurrentCustomerAsync();
+            }
+            catch
+            {
+                TempData["Error"] = "Please complete your shipping details.";
+                return LocalRedirect("/Identity/Account/Manage");
+            }
 
             var cart = await _context.ShoppingCarts
                 .Include(c => c.Items)
@@ -123,11 +141,20 @@ namespace AWEElectronics.Controllers
         [HttpPost]
         public async Task<IActionResult> Clear()
         {
-            var userId = await GetCurrentCustomerAsync();
+            var customer = new Customer();
+            try
+            {
+                customer = await GetCurrentCustomerAsync();
+            }
+            catch
+            {
+                TempData["Error"] = "Please complete your shipping details.";
+                return LocalRedirect("/Identity/Account/Manage");
+            }
 
             var cart = await _context.ShoppingCarts
                 .Include(c => c.Items)
-                .FirstOrDefaultAsync(c => c.CustomerId == userId.Id);
+                .FirstOrDefaultAsync(c => c.CustomerId == customer.Id);
 
             if (cart != null)
             {

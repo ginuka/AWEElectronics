@@ -21,7 +21,16 @@ namespace AWEElectronics.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var customer = await GetCurrentCustomerAsync();
+            var customer = new Customer();
+            try
+            {
+                customer = await GetCurrentCustomerAsync();
+            }
+            catch
+            {
+                TempData["Error"] = "Please complete your shipping details.";
+                return LocalRedirect("/Identity/Account/Manage");
+            }
 
             // Check if shipping/customer details are complete
             if (string.IsNullOrWhiteSpace(customer.Name) ||
@@ -47,7 +56,16 @@ namespace AWEElectronics.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var customer = await GetCurrentCustomerAsync();
+            var customer = new Customer();
+            try
+            {
+                customer = await GetCurrentCustomerAsync();
+            }
+            catch
+            {
+                TempData["Error"] = "Please complete your shipping details.";
+                return LocalRedirect("/Identity/Account/Manage");
+            }
             var order = await _context.Orders
                 .Include(o => o.Items)
                 .ThenInclude(i => i.Product)
